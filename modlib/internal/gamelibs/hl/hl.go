@@ -18,32 +18,36 @@ import "C"
 var hlDLL *hooks.Module
 
 var pmInitPattern = hooks.MakeFunctionPattern("PM_Init", map[string]string{"Windows": "PM_Init"}, map[string]hooks.SearchPattern{
-	gamelibs.HL8684: hooks.MustMakePattern("55 8B EC E8 ?? ?? ?? ?? 8B 55 08 33 C0 56 8D 8A ?? ?? ?? ?? 8B B0 ?? ?? ?? ?? 83 C0 0C 89 71 FC 8B B0 ?? ?? ?? ?? 89 31"),
-	gamelibs.OF8684: hooks.MustMakePattern("8B 44 24 04 A3 ?? ?? ?? ?? E8 ?? ?? ?? ?? E8 ?? ?? ?? ?? C7 05"),
+	gamelibs.HL8684:      hooks.MustMakePattern("55 8B EC E8 ?? ?? ?? ?? 8B 55 08 33 C0 56 8D 8A ?? ?? ?? ?? 8B B0 ?? ?? ?? ?? 83 C0 0C 89 71 FC 8B B0 ?? ?? ?? ?? 89 31"),
+	gamelibs.OF8684:      hooks.MustMakePattern("8B 44 24 04 A3 ?? ?? ?? ?? E8 ?? ?? ?? ?? E8 ?? ?? ?? ?? C7 05"),
+	gamelibs.CryOfFear11: hooks.MustMakePattern("55 8B EC 83 EC 40 53 56 57 83 3D ?? ?? ?? ?? 00 74 ?? A1 ?? ?? ?? ?? 83 C0 01"),
 })
 var pmPlayerMovePattern = hooks.MakeFunctionPattern("PM_PlayerMove", map[string]string{"Windows": "PM_PlayerMove"}, map[string]hooks.SearchPattern{
-	gamelibs.HL8684:     hooks.MustMakePattern("A1 ?? ?? ?? ?? 8B 4C 24 04 55 57 33 FF 89 48 04 E8 ?? ?? ?? ?? 8B 15 ?? ?? ?? ?? 33 C9 89 BA 8C 54 04 00 A1 ?? ?? ?? ?? 8A 88 5A 54 04 00 89"),
-	gamelibs.BigLolly:   hooks.MustMakePattern("55 8B EC 83 EC 0C C7 45 FC 00 00 00 00 A1 ?? ?? ?? ?? 8B 4D 08 89 48 04 E8 ?? ?? ?? ?? 8B 15 ?? ?? ?? ?? C7 82 8C 54 04 00 00 00 00 00 A1"),
-	gamelibs.TWHLTower2: hooks.MustMakePattern("55 8B EC 51 A1 ?? ?? ?? ?? 8B 4D 08 53 56 57 33 FF 89 7D FC 89 48 04 E8 D8 FC FF FF A1 ?? ?? ?? ?? 89 B8 8C 54 04 00 A1 ?? ?? ?? ?? 0F B6 88 5A 54 04 00"),
-	gamelibs.CSCZDS:     hooks.MustMakePattern("A1 ?? ?? ?? ?? 8B 4C 24 04 55 56 57 33 ED 33 FF 89 48 04 E8 ?? ?? ?? ?? 8B 15 ?? ?? ?? ?? 33 C9 89 AA 8C 54 04 00 A1 ?? ?? ?? ?? 8A 88 5A 54 04 00 89"),
+	gamelibs.HL8684:      hooks.MustMakePattern("A1 ?? ?? ?? ?? 8B 4C 24 04 55 57 33 FF 89 48 04 E8 ?? ?? ?? ?? 8B 15 ?? ?? ?? ?? 33 C9 89 BA 8C 54 04 00 A1 ?? ?? ?? ?? 8A 88 5A 54 04 00 89"),
+	gamelibs.BigLolly:    hooks.MustMakePattern("55 8B EC 83 EC 0C C7 45 FC 00 00 00 00 A1 ?? ?? ?? ?? 8B 4D 08 89 48 04 E8 ?? ?? ?? ?? 8B 15 ?? ?? ?? ?? C7 82 8C 54 04 00 00 00 00 00 A1"),
+	gamelibs.TWHLTower2:  hooks.MustMakePattern("55 8B EC 51 A1 ?? ?? ?? ?? 8B 4D 08 53 56 57 33 FF 89 7D FC 89 48 04 E8 D8 FC FF FF A1 ?? ?? ?? ?? 89 B8 8C 54 04 00 A1 ?? ?? ?? ?? 0F B6 88 5A 54 04 00"),
+	gamelibs.CSCZDS:      hooks.MustMakePattern("A1 ?? ?? ?? ?? 8B 4C 24 04 55 56 57 33 ED 33 FF 89 48 04 E8 ?? ?? ?? ?? 8B 15 ?? ?? ?? ?? 33 C9 89 AA 8C 54 04 00 A1 ?? ?? ?? ?? 8A 88 5A 54 04 00 89"),
+	gamelibs.CryOfFear11: hooks.MustMakePattern("55 8B EC 83 EC 48 53 56 57 C7 45 ?? 00 00 00 00 A1 ?? ?? ?? ?? 8B 4D 08 89 48 04 E8 ?? ?? ?? ?? A1 ?? ?? ?? ?? C7 80 ?? 54 04 00 00 00 00 00"),
 })
 var csoundEntActiveListPattern = hooks.MakeFunctionPattern("CSoundEnt::ActiveList", map[string]string{gamelibs.WindowsHLDLL: "CSoundEnt::ActiveList"}, map[string]hooks.SearchPattern{
-	gamelibs.HL8684: hooks.MustMakePattern("A1 ?? ?? ?? ?? 85 C0 75 04 83 C8 FF C3 8B 40 58 C3"),
-	gamelibs.OF8684: hooks.MustMakePattern("A1 ?? ?? ?? ?? 85 C0 75 04 83 C8 FF C3 8B 40 64 C3"),
-	gamelibs.HLWON:  hooks.MustMakePattern("A1 ?? ?? ?? ?? 85 C0 75 04 83 C8 FF C3 8B 40 24 C3"),
-	gamelibs.CSCZDS: hooks.MustMakePattern("A1 ?? ?? ?? ?? 85 C0 75 04 83 C8 FF C3 8B 40 50 C3"),
+	gamelibs.HL8684:      hooks.MustMakePattern("A1 ?? ?? ?? ?? 85 C0 75 04 83 C8 FF C3 8B 40 58 C3"),
+	gamelibs.OF8684:      hooks.MustMakePattern("A1 ?? ?? ?? ?? 85 C0 75 04 83 C8 FF C3 8B 40 64 C3"),
+	gamelibs.HLWON:       hooks.MustMakePattern("A1 ?? ?? ?? ?? 85 C0 75 04 83 C8 FF C3 8B 40 24 C3"),
+	gamelibs.CSCZDS:      hooks.MustMakePattern("A1 ?? ?? ?? ?? 85 C0 75 04 83 C8 FF C3 8B 40 50 C3"),
+	gamelibs.CryOfFear11: hooks.MustMakePattern("55 8B EC 83 EC 40 53 56 57 83 3D ?? ?? ?? ?? 00 75 ?? 83 C8 FF EB ?? A1 ?? ?? ?? ?? 8B 80 ?? ?? ?? ?? 5F 5E 5B 8B E5 5D C3 CC CC CC CC CC CC CC 55 8B EC 83 EC 40 53 56 57 83 3D ?? ?? ?? ?? 00 75 ?? 83 C8 FF EB ?? A1 ?? ?? ?? ?? 8B 80 ?? ?? ?? ?? 5F 5E 5B 8B E5 5D C3 CC CC CC CC CC CC CC 55 8B EC 83 EC 40 53 56 57 83 3D ?? ?? ?? ?? 00 75 ?? 33 C0"),
 })
 var csoundEntSoundPointerForIndexPattern = hooks.MakeFunctionPattern("CSoundEnt::SoundPointerForIndex", map[string]string{gamelibs.WindowsHLDLL: "CSoundEnt::SoundPointerForIndex"}, map[string]hooks.SearchPattern{
 	gamelibs.HL8684: hooks.MustMakePattern("8B 0D ?? ?? ?? ?? 85 C9 75 03 33 C0 C3 8B 44 24 04 83 F8 3F 7E 13 68 ?? ?? ?? ?? 6A 01 FF 15 ?? ?? ?? ??"),
 })
 var cbaseMonsterChangeSchedulePattern = hooks.MakeFunctionPattern("CBaseMonster::ChangeSchedule", map[string]string{gamelibs.WindowsHLDLL: "CBaseMonster::ChangeSchedule"}, map[string]hooks.SearchPattern{
 	// Search for COND_HEAR_SOUND
-	gamelibs.HL8684: hooks.MustMakePattern("8B 44 24 04 33 D2 89 81 78 01 00 00 89 91 7C 01 00 00 89 91 74 01 00 00 89 91 F0 00 00 00 89 91 68 02 00 00"),
-	gamelibs.OF8684: hooks.MustMakePattern("8B 81 84 01 00 00 33 D2 3B C2 56 74 55 8B 00 3B C2 74 4F 8B B1 88 01 00 00 57 8B 3C F0"),
-	gamelibs.HLWON:  hooks.MustMakePattern("8B 44 24 04 33 D2 89 81 44 01 00 00 89 91 48 01 00 00 89 91 40 01 00 00 89 91 BC 00 00 00 89 91 34 02 00 00"),
-	gamelibs.OFWON:  hooks.MustMakePattern("8B 81 48 01 00 00 33 D2 3B C2 56 74 55 8B 00 3B C2 74 4F 8B B1 4C 01 00 00 57 8B 3C F0"),
-	gamelibs.CSCZDS: hooks.MustMakePattern("8B 44 24 04 33 D2 89 81 74 01 00 00 89 91 78 01 00 00 89 91 70 01 00 00 89 91 7C 01 00 00 89 91 88 02 00 00"),
-	gamelibs.Gunman: hooks.MustMakePattern("8B 44 24 04 53 57 8B F9 33 DB 89 87 4C 01 00 00 89 9F 50 01 00 00 89 9F 48 01 00 00 89 9F BC 00 00 00 89 9F 3C 02 00 00"),
+	gamelibs.HL8684:      hooks.MustMakePattern("8B 44 24 04 33 D2 89 81 78 01 00 00 89 91 7C 01 00 00 89 91 74 01 00 00 89 91 F0 00 00 00 89 91 68 02 00 00"),
+	gamelibs.OF8684:      hooks.MustMakePattern("8B 81 84 01 00 00 33 D2 3B C2 56 74 55 8B 00 3B C2 74 4F 8B B1 88 01 00 00 57 8B 3C F0"),
+	gamelibs.HLWON:       hooks.MustMakePattern("8B 44 24 04 33 D2 89 81 44 01 00 00 89 91 48 01 00 00 89 91 40 01 00 00 89 91 BC 00 00 00 89 91 34 02 00 00"),
+	gamelibs.OFWON:       hooks.MustMakePattern("8B 81 48 01 00 00 33 D2 3B C2 56 74 55 8B 00 3B C2 74 4F 8B B1 4C 01 00 00 57 8B 3C F0"),
+	gamelibs.CSCZDS:      hooks.MustMakePattern("8B 44 24 04 33 D2 89 81 74 01 00 00 89 91 78 01 00 00 89 91 70 01 00 00 89 91 7C 01 00 00 89 91 88 02 00 00"),
+	gamelibs.Gunman:      hooks.MustMakePattern("8B 44 24 04 53 57 8B F9 33 DB 89 87 4C 01 00 00 89 9F 50 01 00 00 89 9F 48 01 00 00 89 9F BC 00 00 00 89 9F 3C 02 00 00"),
+	gamelibs.CryOfFear11: hooks.MustMakePattern("55 8B EC 83 EC 44 53 56 57 89 4D ?? 6A 00 A1 ?? ?? ?? ?? 83 C0 01 50 68 ?? ?? ?? ?? 68 ?? ?? ?? ?? 33 C9 83 7D ?? 00 0F 95 C1 51 E8 ?? ?? ?? ?? 83 C4 14 8B 45"),
 })
 var cbaseMonsterRouteNewPattern = hooks.MakeFunctionPattern("CBaseMonster::RouteNew", map[string]string{
 	gamelibs.WindowsHLDLL: "CBaseMonster::RouteNew",
@@ -51,20 +55,38 @@ var cbaseMonsterRouteNewPattern = hooks.MakeFunctionPattern("CBaseMonster::Route
 	// Search for "No Path from %d to %d!" to find CBaseMonster::FGetNodeRoute
 	// Go to any of the cross reference, the first function should be CBaseMonster::RouteNew
 	// This pattern includes the initial part of CBaseMonster::FRouteClear, and mask out the offsets
-	gamelibs.HL8684: hooks.MustMakePattern("33 C0 89 81 ?? ?? ?? ?? 89 81 ?? ?? ?? ?? C3 90 8B 81 ?? ?? ?? ?? C1 E0 04"),
-	gamelibs.CSCZDS: hooks.MustMakePattern("33 C0 89 81 ?? ?? ?? ?? 89 81 ?? ?? ?? ?? C3 90 8B 81 ?? ?? ?? ?? 83 C0 14"),
-	gamelibs.Gunman: hooks.MustMakePattern("33 C0 89 81 ?? ?? ?? ?? 89 81 ?? ?? ?? ?? C3 90 8B 81 ?? ?? ?? ?? 83 C0 16"),
+	gamelibs.HL8684:      hooks.MustMakePattern("33 C0 89 81 ?? ?? ?? ?? 89 81 ?? ?? ?? ?? C3 90 8B 81 ?? ?? ?? ?? C1 E0 04"),
+	gamelibs.CSCZDS:      hooks.MustMakePattern("33 C0 89 81 ?? ?? ?? ?? 89 81 ?? ?? ?? ?? C3 90 8B 81 ?? ?? ?? ?? 83 C0 14"),
+	gamelibs.Gunman:      hooks.MustMakePattern("33 C0 89 81 ?? ?? ?? ?? 89 81 ?? ?? ?? ?? C3 90 8B 81 ?? ?? ?? ?? 83 C0 16"),
+	gamelibs.CryOfFear11: hooks.MustMakePattern("55 8B EC 83 EC 44 53 56 57 89 4D ?? 8B 45 ?? C7 80 ?? ?? ?? ?? 00 00 00 00 8B 45 ?? C7 80 ?? ?? ?? ?? 00 00 00 00 5F"),
 })
 var cbaseMonsterPBestSoundPattern = hooks.MakeFunctionPattern("CBaseMonster::PBestSound", map[string]string{
 	gamelibs.WindowsHLDLL: "CBaseMonster::PBestSound",
 }, map[string]hooks.SearchPattern{
 	// Search for "ERROR! monster %s has no audible sounds!"
-	gamelibs.HL8684: hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB 1C 02 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
-	gamelibs.OF8684: hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB 28 02 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
-	gamelibs.HLWON:  hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB E8 01 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
-	gamelibs.OFWON:  hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB EC 01 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
-	gamelibs.CSCZDS: hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB 3C 02 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
-	gamelibs.Gunman: hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB F0 01 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
+	gamelibs.HL8684:      hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB 1C 02 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
+	gamelibs.OF8684:      hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB 28 02 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
+	gamelibs.HLWON:       hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB E8 01 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
+	gamelibs.OFWON:       hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB EC 01 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
+	gamelibs.CSCZDS:      hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB 3C 02 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
+	gamelibs.Gunman:      hooks.MustMakePattern("83 EC 10 53 8B D9 55 57 8B BB F0 01 00 00 83 CD FF 83 FF FF C7 44 24 0C 00 00 00 46 75 2D"),
+	gamelibs.CryOfFear11: hooks.MustMakePattern("55 8B EC 83 EC 70 53 56 57 89 4D ?? C7 45 ?? FF FF FF FF C7 45 F0 00 00 00 46 8B 45 FC 8B 88"),
+})
+var cbasePlayerForceClientDllUpdatePattern = hooks.MakeFunctionPattern("CBasePlayer::ForceClientDllUpdate", map[string]string{
+	gamelibs.WindowsHLDLL: "CBasePlayer::ForceClientDllUpdate",
+}, map[string]hooks.SearchPattern{
+	// Search for "fullupdate"
+	gamelibs.HLWON:       hooks.MustMakePattern("83 C8 FF 89 81 50 04 00 00 89 81 54 04 00 00 8B 81 2C 04 00 00 0C C0 89 81 2C 04 00 00 33 C0 89 81 30 04 00 00 89 81 B4 02 00 00 8B 01 FF A0 04 02 00 00"),
+	gamelibs.HL6153:      hooks.MustMakePattern("83 C8 FF C7 81 6C 04 00 00 01 00 00 00 89 81 98 04 00 00 89 81 9C 04 00 00 8B 81 74 04 00 00 0C C0 89 81 74 04 00 00 33 C0 89 81 78 04 00 00"),
+	gamelibs.HL8684:      hooks.MustMakePattern("83 C8 FF C7 81 70 04 00 00 01 00 00 00 89 81 9C 04 00 00 89 81 A0 04 00 00 8B 81 78 04 00 00 0C C0 89 81 78 04 00 00 33 C0 89 81 7C 04 00 00"),
+	gamelibs.OFWON:       hooks.MustMakePattern("83 C8 FF 89 81 90 04 00 00 89 81 94 04 00 00 8B 81 6C 04 00 00 0C C0 89 81 6C 04 00 00 33 C0 89 81 70 04 00 00 89 81 F4 02 00 00 8B 01 FF A0 08 02 00 00"),
+	gamelibs.OF6153:      hooks.MustMakePattern("83 C8 FF 89 81 CC 04 00 00 89 81 D0 04 00 00 8B 81 A8 04 00 00 0C C0 89 81 A8 04 00 00 33 C0 89 81 AC 04 00 00 89 81 30 03 00 00 8B 01 FF A0 0C 02 00 00"),
+	gamelibs.OF8684:      hooks.MustMakePattern("83 C8 FF 89 81 D0 04 00 00 89 81 D4 04 00 00 8B 81 AC 04 00 00 0C C0 89 81 AC 04 00 00 33 C0 89 81 B0 04 00 00 89 81 34 03 00 00 8B 01 FF A0 0C 02 00 00"),
+	gamelibs.CSCZDS:      hooks.MustMakePattern("8B D1 83 C9 FF 57 8B 82 C8 05 00 00 89 8A 60 06 00 00 0C C0 89 8A 64 06 00 00 89 82 C8 05 00 00 33 C0 89 8A 68 06 00 00"),
+	gamelibs.CSCZDS8684:  hooks.MustMakePattern("8B D1 83 C9 FF 57 8B 82 CC 05 00 00 89 8A 64 06 00 00 0C C0 89 8A 68 06 00 00 89 82 CC 05 00 00 33 C0 89 8A 6C 06 00 00"),
+	gamelibs.Gunman:      hooks.MustMakePattern("8B 91 48 04 00 00 83 C8 FF 89 81 68 04 00 00 89 81 6C 04 00 00 33 C0 80 CA C0 88 81 79 02 00 00 89 81 4C 04 00 00 89 81 D0 02 00 00 8B 01"),
+	gamelibs.CryOfFear11: hooks.MustMakePattern("55 8B EC 83 EC 44 53 56 57 89 4D FC A1 ?? ?? ?? ?? B9 ?? ?? ?? ?? 2B 88 98 00 00 00 8B 55 FC 89 8A F8 05 00 00 8B 45 FC C7 80 7C 23 00 00 FF FF FF FF"),
+	gamelibs.CryOfFear14: hooks.MustMakePattern("55 8B EC 83 EC 44 53 56 57 89 4D FC A1 ?? ?? ?? ?? B9 ?? ?? ?? ?? 2B 88 98 00 00 00 8B 55 FC 89 8A 14 06 00 00 8B 45 FC C7 80 9C 23 00 00 FF FF FF FF"),
 })
 var worldGraphPattern = hooks.MakeFunctionPattern("WorldGraph", map[string]string{
 	// Not actually a function
@@ -75,7 +97,8 @@ var cgraphInitGraphPattern = hooks.MakeFunctionPattern("CGraph::InitGraph", map[
 }, map[string]hooks.SearchPattern{
 	// Search for "Couldn't malloc %d nodes!" to find CGraph::AllocNodes
 	// Then find cross reference from CWorld::Precache
-	gamelibs.HL8684: hooks.MustMakePattern("56 8B F1 57 33 FF 8B 46 10 89 3E 3B C7 89 7E 04 89 7E 08 74 0C 50 E8 ?? ?? ?? ?? 83 C4 04 89 7E 10 8B 46 0C"),
+	gamelibs.HL8684:      hooks.MustMakePattern("56 8B F1 57 33 FF 8B 46 10 89 3E 3B C7 89 7E 04 89 7E 08 74 0C 50 E8 ?? ?? ?? ?? 83 C4 04 89 7E 10 8B 46 0C"),
+	gamelibs.CryOfFear11: hooks.MustMakePattern("55 8B EC 83 EC 44 53 56 57 89 4D ?? 8B 45 ?? C7 00 00 00 00 00 8B 45 ?? C7 40 ?? 00 00 00 00 8B 45"),
 })
 
 // HookedPMInit PM_Init
@@ -148,30 +171,22 @@ func InitHLDLL(base string) (err error) {
 	}
 
 	items := map[*hooks.FunctionPattern]unsafe.Pointer{
-		&pmInitPattern:                        C.HookedPMInit,
-		&pmPlayerMovePattern:                  C.HookedPMPlayerMove,
-		&csoundEntActiveListPattern:           nil,
-		&csoundEntSoundPointerForIndexPattern: nil,
-		&cbaseMonsterChangeSchedulePattern:    nil,
-		&cbaseMonsterRouteNewPattern:          nil,
-		&worldGraphPattern:                    nil,
-		&cgraphInitGraphPattern:               C.C_HookedCGraphInitGraph,
-		&cbaseMonsterPBestSoundPattern:        nil,
+		&pmInitPattern:                          C.HookedPMInit,
+		&pmPlayerMovePattern:                    C.HookedPMPlayerMove,
+		&csoundEntActiveListPattern:             nil,
+		&csoundEntSoundPointerForIndexPattern:   nil,
+		&cbaseMonsterChangeSchedulePattern:      nil,
+		&cbaseMonsterRouteNewPattern:            nil,
+		&worldGraphPattern:                      nil,
+		&cgraphInitGraphPattern:                 C.C_HookedCGraphInitGraph,
+		&cbaseMonsterPBestSoundPattern:          nil,
+		&cbasePlayerForceClientDllUpdatePattern: nil,
 	}
 
 	errors := hooks.BatchFind(hlDLL, items)
 	gamelibs.PrintBatchFindErrors(errors)
 
 	switch cbaseMonsterChangeSchedulePattern.PatternKey() {
-	case gamelibs.OF8684:
-		engine.MonsterOffsets.MonsterState = 0x178
-		engine.MonsterOffsets.Schedule = 0x184
-		engine.MonsterOffsets.ScheduleIndex = 0x188
-		engine.MonsterOffsets.Cine = 0x29c
-		engine.MonsterOffsets.AudibleList = 0x228
-		engine.MonsterOffsets.WaitFinished = 0x164
-		engine.CineOffsets.Radius = 0x2dc
-		engine.CineOffsets.Interruptible = 0x2f8
 	case gamelibs.HLWON:
 		engine.MonsterOffsets.MonsterState = 0x138
 		engine.MonsterOffsets.Schedule = 0x144
@@ -181,6 +196,15 @@ func InitHLDLL(base string) (err error) {
 		engine.MonsterOffsets.WaitFinished = 0x124
 		engine.CineOffsets.Radius = 0x274
 		engine.CineOffsets.Interruptible = 0x290
+	case gamelibs.HL6153:
+		engine.MonsterOffsets.MonsterState = 0x16c
+		engine.MonsterOffsets.Schedule = 0x178
+		engine.MonsterOffsets.ScheduleIndex = 0x17c
+		engine.MonsterOffsets.Cine = 0x290
+		engine.MonsterOffsets.AudibleList = 0x21c
+		engine.MonsterOffsets.WaitFinished = 0x158
+		engine.CineOffsets.Radius = 0x2a8
+		engine.CineOffsets.Interruptible = 0x2c4
 	case gamelibs.OFWON:
 		engine.MonsterOffsets.MonsterState = 0x13c
 		engine.MonsterOffsets.Schedule = 0x148
@@ -190,6 +214,15 @@ func InitHLDLL(base string) (err error) {
 		engine.MonsterOffsets.WaitFinished = 0x128
 		engine.CineOffsets.Radius = 0x29c
 		engine.CineOffsets.Interruptible = 0x2b8
+	case gamelibs.OF6153:
+		engine.MonsterOffsets.MonsterState = 0x178
+		engine.MonsterOffsets.Schedule = 0x184
+		engine.MonsterOffsets.ScheduleIndex = 0x188
+		engine.MonsterOffsets.Cine = 0x29c
+		engine.MonsterOffsets.AudibleList = 0x228
+		engine.MonsterOffsets.WaitFinished = 0x164
+		engine.CineOffsets.Radius = 0x2d8
+		engine.CineOffsets.Interruptible = 0x2f4
 	case gamelibs.CSCZDS:
 		engine.MonsterOffsets.MonsterState = 0x168
 		engine.MonsterOffsets.Schedule = 0x174
@@ -197,8 +230,9 @@ func InitHLDLL(base string) (err error) {
 		engine.MonsterOffsets.Cine = 0x2b0
 		engine.MonsterOffsets.AudibleList = 0x23c
 		engine.MonsterOffsets.WaitFinished = 0x150
-		engine.CineOffsets.Radius = 0x350
-		engine.CineOffsets.Interruptible = 0x36c
+		engine.CineOffsets.Radius = 0x34c
+		engine.CineOffsets.Interruptible = 0x368
+		engine.GraphConsts.CNodeSize = 0x60
 	case gamelibs.Gunman:
 		engine.MonsterOffsets.MonsterState = 0x140
 		engine.MonsterOffsets.Schedule = 0x14c
@@ -210,10 +244,34 @@ func InitHLDLL(base string) (err error) {
 		engine.CineOffsets.Interruptible = 0x2a4
 	}
 
-	switch cbaseMonsterChangeSchedulePattern.SymbolKey() {
-	case gamelibs.WindowsHLDLL:
-		engine.CineOffsets.Radius = 0x2a8
-		engine.CineOffsets.Interruptible = 0x2c4
+	switch cbasePlayerForceClientDllUpdatePattern.PatternKey() {
+	case gamelibs.HL8684:
+		engine.CineOffsets.Radius = 0x2ac
+		engine.CineOffsets.Interruptible = 0x2c8
+	case gamelibs.OF8684:
+		engine.CineOffsets.Radius = 0x2dc
+		engine.CineOffsets.Interruptible = 0x2f8
+	case gamelibs.CSCZDS8684:
+		engine.CineOffsets.Radius = 0x350
+		engine.CineOffsets.Interruptible = 0x36c
+	case gamelibs.CryOfFear11:
+		engine.MonsterOffsets.MonsterState = 0x214
+		engine.MonsterOffsets.Schedule = 0x220
+		engine.MonsterOffsets.ScheduleIndex = 0x224
+		engine.MonsterOffsets.Cine = 0x33c
+		engine.MonsterOffsets.AudibleList = 0x2c4
+		engine.MonsterOffsets.WaitFinished = 0x1fc
+		engine.CineOffsets.Radius = 0x384
+		engine.CineOffsets.Interruptible = 0x3ac
+	case gamelibs.CryOfFear14:
+		engine.MonsterOffsets.MonsterState = 0x220
+		engine.MonsterOffsets.Schedule = 0x22c
+		engine.MonsterOffsets.ScheduleIndex = 0x230
+		engine.MonsterOffsets.Cine = 0x348
+		engine.MonsterOffsets.AudibleList = 0x2d0
+		engine.MonsterOffsets.WaitFinished = 0x208
+		engine.CineOffsets.Radius = 0x390
+		engine.CineOffsets.Interruptible = 0x3b8
 	}
 
 	if worldGraphPattern.Address() != nil {
@@ -224,6 +282,9 @@ func InitHLDLL(base string) (err error) {
 	case gamelibs.HL8684, gamelibs.CSCZDS, gamelibs.Gunman:
 		engine.MonsterOffsets.Route = *(*uintptr)(unsafe.Pointer(uintptr(cbaseMonsterRouteNewPattern.Address()) + 0x4)) - 0xc
 		engine.MonsterOffsets.RouteIndex = *(*uintptr)(unsafe.Pointer(uintptr(cbaseMonsterRouteNewPattern.Address()) + 0xa))
+	case gamelibs.CryOfFear11:
+		engine.MonsterOffsets.Route = *(*uintptr)(unsafe.Pointer(uintptr(cbaseMonsterRouteNewPattern.Address()) + 0x11)) - 0xc
+		engine.MonsterOffsets.RouteIndex = *(*uintptr)(unsafe.Pointer(uintptr(cbaseMonsterRouteNewPattern.Address()) + 0x1e))
 	}
 
 	return

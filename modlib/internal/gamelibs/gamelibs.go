@@ -7,18 +7,23 @@ import (
 )
 
 const (
-	HL8684     = "HL-8684"
-	HL4554     = "HL-4554"
-	HLNGHL     = "HL-NGHL"
-	HLWON      = "HL-WON"
-	BigLolly   = "BigLolly"
-	TWHLTower2 = "TWHL-Tower-2"
-	OF8684     = "OpFor-8684"
-	OFWON      = "OpFor-WON"
-	CSCZDS     = "CSCZDS"
-	Gunman     = "Gunman"
+	HL8684          = "HL-8684"
+	HL6153          = "HL-6153"
+	HL4554          = "HL-4554"
+	HLNGHL          = "HL-NGHL"
+	HLWON           = "HL-WON"
+	BigLolly        = "BigLolly"
+	TWHLTower2      = "TWHL-Tower-2"
+	OF8684          = "OpFor-8684"
+	OF6153          = "OpFor-6153"
+	OFWON           = "OpFor-WON"
+	CSCZDS          = "CSCZDS"
+	CSCZDS8684      = "CSCZDS-8684"
+	Gunman          = "Gunman"
+	CryOfFear11     = "CryOfFear11"
+	CryOfFear14     = "CryOfFear14"
 
-	WindowsHLDLL = "Windows-HL-DLL"
+	WindowsHLDLL    = "Windows-HL-DLL"
 )
 
 // PrintBatchFindErrors prints standardised logs
