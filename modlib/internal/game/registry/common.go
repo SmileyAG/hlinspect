@@ -11,7 +11,7 @@ const (
 	VersionOF8684      = "OF-8684"
 	VersionOF6153      = "OF-6153"
 	VersionOFWON       = "OF-WON"
-	VersionCSCZDS8684  = "CSCZDS8684"
+	VersionCSCZDS8684  = "CSCZDS-8684"
 	VersionCSCZDS      = "CSCZDS"
 	VersionGunman      = "Gunman"
 	VersionCryOfFear11 = "CryOfFear11"
