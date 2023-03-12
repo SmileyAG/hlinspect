@@ -21,13 +21,16 @@ import "C"
 var kernelDLL *hooks.Module
 
 var libraryInitializers = map[string]func(base string) error{
-	"hl.dll":     game.Model.InitHLDLL,
-	"opfor.dll":  game.Model.InitHLDLL,
-	"cz.dll":     game.Model.InitHLDLL,
-	"gunman.dll": game.Model.InitHLDLL,
-	"wanted.dll": game.Model.InitHLDLL,
-	"hw.dll":     game.Model.InitHWDLL,
-	"client.dll": game.Model.InitCLDLL,
+	"hl.dll":       game.Model.InitHLDLL,
+	"opfor.dll":    game.Model.InitHLDLL,
+	"cz.dll":       game.Model.InitHLDLL,
+	"gunman.dll":   game.Model.InitHLDLL,
+	"wanted.dll":   game.Model.InitHLDLL,
+	"echoes.dll":   game.Model.InitHLDLL,
+	"spirit.dll":   game.Model.InitHLDLL,
+	"einar.dll":    game.Model.InitHLDLL,
+	"hw.dll":       game.Model.InitHWDLL,
+	"client.dll":   game.Model.InitCLDLL,
 }
 
 var loadLibraryAPattern = hooks.NewFunctionPattern("LoadLibraryA", hooks.SymbolNameMap{"Windows": "LoadLibraryA"}, nil)
